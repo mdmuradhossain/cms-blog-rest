@@ -4,6 +4,7 @@ import io.murad.blog.rest.dto.RegisterRequest;
 import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.model.VerificationToken;
 import io.murad.blog.rest.repository.UserRepository;
+import io.murad.blog.rest.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,12 @@ public class AuthService {
         String token = generateVerificationToken(user);
     }
 
-    private String generateVerificationToken(User user){
+    private String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
-        verificationTokenRepository
+        verificationTokenRepository.save(verificationToken);
+        return token;
     }
 }
