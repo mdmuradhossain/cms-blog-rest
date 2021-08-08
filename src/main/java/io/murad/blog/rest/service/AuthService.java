@@ -1,6 +1,7 @@
 package io.murad.blog.rest.service;
 
 import io.murad.blog.rest.dto.RegisterRequest;
+import io.murad.blog.rest.model.NotificationEmail;
 import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.model.VerificationToken;
 import io.murad.blog.rest.repository.UserRepository;
@@ -20,6 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final MailService mailService;
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
@@ -33,6 +35,10 @@ public class AuthService {
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
+        mailService.sendMail(new NotificationEmail("Please activate your Account",
+                user.getEmail(), "Thank you for signing up to CMS Blog, " +
+                "please click on the below url to activate your account: " +
+                "http://localhost:8080/auth/accountVerification/" + token));
     }
 
     private String generateVerificationToken(User user) {
