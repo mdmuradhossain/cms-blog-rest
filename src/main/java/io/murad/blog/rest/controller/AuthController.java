@@ -1,5 +1,6 @@
 package io.murad.blog.rest.controller;
 
+import io.murad.blog.rest.dto.RegisterRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
