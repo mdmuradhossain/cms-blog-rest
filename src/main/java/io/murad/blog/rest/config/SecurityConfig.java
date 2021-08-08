@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
+//    private final UserDetailsService userDetailsService;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -27,11 +27,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService)
-               .passwordEncoder(passwordEncoder());
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//       auth.userDetailsService(userDetailsService)
+//               .passwordEncoder(passwordEncoder());
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder(){
