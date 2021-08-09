@@ -1,6 +1,7 @@
 package io.murad.blog.rest.service;
 
 import io.murad.blog.rest.dto.RegisterRequest;
+import io.murad.blog.rest.exception.BlogRestException;
 import io.murad.blog.rest.model.NotificationEmail;
 import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.model.VerificationToken;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -48,5 +50,19 @@ public class AuthService {
         verificationToken.setUser(user);
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        verificationToken.orElseThrow(() -> new BlogRestException("Invalid Token"));
+        getUserAndEnableAccount(verificationToken.get());
+    }
+
+    @Transactional
+    public void getUserAndEnableAccount(VerificationToken verificationToken) {
+        String username = verificationToken.getUser().getUserName();
+        User user = userRepository.findByUserName(username).orElseThrow(() -> new BlogRestException("User not found with name" + username));
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }
