@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long postId;
 
     private String title;
 
@@ -31,6 +32,13 @@ public class Post implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "postId"),
+            inverseJoinColumns = @JoinColumn(name = "tagId"))
+    private List<Tag> tags;
 
     private Instant createdAt;
 

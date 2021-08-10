@@ -34,7 +34,7 @@ public class JwtAuthenticationProvider {
         try {
             keyStore = KeyStore.getInstance("JKS");
             FileInputStream JksFile = new FileInputStream("src/main/resources/blog.jks");
-//            InputStream resourceStream = getClass().getResourceAsStream("/springblog.jks");
+//            InputStream resourceStream = getClass().getResourceAsStream("/blog.jks");
             keyStore.load(JksFile, "secret".toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             throw new BlogRestException("Exception occurred while loading keystore");
@@ -60,7 +60,7 @@ public class JwtAuthenticationProvider {
 
     private PrivateKey getPrivateKey() {
         try {
-            return (PrivateKey) keyStore.getKey("blog", "secret".toCharArray());
+            return (PrivateKey) keyStore.getKey("springblog", "secret".toCharArray());
         } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {
             throw new BlogRestException("Exception occurred while retrieving public key from keystore.");
         }
@@ -73,7 +73,7 @@ public class JwtAuthenticationProvider {
 
     private PublicKey getPublicKey() {
         try {
-            return keyStore.getCertificate("blog").getPublicKey();
+            return keyStore.getCertificate("springblog").getPublicKey();
         } catch (KeyStoreException e) {
             throw new BlogRestException("Exception occurred while " + "retrieving public key from keystore");
         }
