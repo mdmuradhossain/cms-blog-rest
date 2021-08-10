@@ -1,5 +1,7 @@
 package io.murad.blog.rest.controller;
 
+import io.murad.blog.rest.dto.AuthenticationRequest;
+import io.murad.blog.rest.dto.AuthenticationResponse;
 import io.murad.blog.rest.dto.RegisterRequest;
 import io.murad.blog.rest.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody AuthenticationResponse authenticationResponse){
-
+    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody AuthenticationRequest authenticationRequest){
+    AuthenticationResponse authenticationResponse = authService.signIn(authenticationRequest);
+    return new ResponseEntity<>(authenticationResponse,HttpStatus.OK);
     }
 }

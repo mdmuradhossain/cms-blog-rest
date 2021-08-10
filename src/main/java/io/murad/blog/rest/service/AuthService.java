@@ -1,5 +1,7 @@
 package io.murad.blog.rest.service;
 
+import io.murad.blog.rest.dto.AuthenticationRequest;
+import io.murad.blog.rest.dto.AuthenticationResponse;
 import io.murad.blog.rest.dto.RegisterRequest;
 import io.murad.blog.rest.exception.BlogRestException;
 import io.murad.blog.rest.model.NotificationEmail;
@@ -7,7 +9,13 @@ import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.model.VerificationToken;
 import io.murad.blog.rest.repository.UserRepository;
 import io.murad.blog.rest.repository.VerificationTokenRepository;
+import io.murad.blog.rest.security.JwtAuthenticationProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +32,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
@@ -64,5 +74,12 @@ public class AuthService {
         User user = userRepository.findByUserName(username).orElseThrow(() -> new BlogRestException("User not found with name" + username));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
+    Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authenticate);
+    String token = jwtAuthenticationProvider.generateToken(authenticate);
+    return new AuthenticationResponse(token,authenticationRequest.getUsername());
     }
 }
