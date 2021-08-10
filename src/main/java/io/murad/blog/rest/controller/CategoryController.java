@@ -1,6 +1,7 @@
 package io.murad.blog.rest.controller;
 
 import io.murad.blog.rest.dto.CategoryDto;
+import io.murad.blog.rest.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
