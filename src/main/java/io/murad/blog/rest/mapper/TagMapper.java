@@ -18,7 +18,7 @@ public interface TagMapper {
     @Mappings({
             @Mapping(target = "tagId", source = "tagDto.id"),
             @Mapping(target = "tagName", source = "tagDto.name"),
-            @Mapping(target = "posts", source = "true")
+            @Mapping(target = "posts", ignore = true)
     })
     Tag mapToTag(TagDto tagDto);
 
