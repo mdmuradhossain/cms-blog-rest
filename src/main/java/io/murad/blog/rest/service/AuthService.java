@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,9 +78,16 @@ public class AuthService {
     }
 
     public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
-    Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
-    SecurityContextHolder.getContext().setAuthentication(authenticate);
-    String token = jwtAuthenticationProvider.generateToken(authenticate);
-    return new AuthenticationResponse(token,authenticationRequest.getUsername());
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtAuthenticationProvider.generateToken(authenticate);
+        return new AuthenticationResponse(token, authenticationRequest.getUsername());
+    }
+
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUserName(principal.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found " + principal.getUsername()));
     }
 }
