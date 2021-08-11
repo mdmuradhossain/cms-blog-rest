@@ -20,10 +20,10 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    private String title;
+    private String postTitle;
 
     @Lob
-    private String content;
+    private String postContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
