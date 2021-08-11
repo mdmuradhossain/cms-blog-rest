@@ -9,16 +9,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+import java.util.Optional;
+
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
     @Mappings({
             @Mapping(target = "category", source = "category"),
-            @Mapping(target = "tag", source = "tag"),
+//            @Mapping(target = "tags", source = "tags"),
             @Mapping(target = "user", source = "user"),
             @Mapping(target = "createdAt", expression = "java(java.time.Instant.now())"),
             @Mapping(target = "postContent", source = "postRequest.content")
     })
-    public Post mapToPost(PostRequest postRequest, Category category, Tag tag, User user);
+    public Post mapToPost(PostRequest postRequest, Category category, User user);
 
 }

@@ -11,6 +11,9 @@ import io.murad.blog.rest.repository.TagRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class PostService {
@@ -22,9 +25,8 @@ public class PostService {
     private final PostMapper postMapper;
 
     public void savePost(PostRequest postRequest) {
-        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).get();
-        Tag tag = tagRepository.findByTagName(postRequest.getTagName()).get();
+        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(()-> new CategoryNotFoundException("Not Found"));
         User currentUser = authService.getCurrentUser();
-        postRepository.save(postMapper.mapToPost(postRequest, category, tag, currentUser));
+        postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
     }
 }
