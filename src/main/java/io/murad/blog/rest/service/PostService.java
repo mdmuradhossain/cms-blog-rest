@@ -1,8 +1,11 @@
 package io.murad.blog.rest.service;
 
 import io.murad.blog.rest.dto.PostRequest;
+import io.murad.blog.rest.dto.PostResponse;
+import io.murad.blog.rest.exception.CategoryNotFoundException;
 import io.murad.blog.rest.mapper.PostMapper;
 import io.murad.blog.rest.model.Category;
+import io.murad.blog.rest.model.Post;
 import io.murad.blog.rest.model.Tag;
 import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.repository.CategoryRepository;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,8 +29,17 @@ public class PostService {
     private final PostMapper postMapper;
 
     public void savePost(PostRequest postRequest) {
-        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(()-> new CategoryNotFoundException("Not Found"));
+        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(()-> new CategoryNotFoundException("Category Not Found "+postRequest.getCategoryName()));
         User currentUser = authService.getCurrentUser();
         postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
+    }
+
+    public List<PostResponse> getAllPosts(){
+        return postRepository.findAll()
+                .stream()
+                .map((post)-> postMapper.mapToPostDto(post)).collect(Collectors.toList());
+    }
+    public PostResponse getPost(Long id){
+        Post post = postRepository.findById(id).orElseThrow(()->new PostNotFoundException("Post not found "+id.toString()));
     }
 }

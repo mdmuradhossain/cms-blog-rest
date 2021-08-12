@@ -17,7 +17,7 @@ import java.util.List;
 public class Post implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long postId;
 
     private String postTitle;
@@ -26,18 +26,18 @@ public class Post implements Serializable {
     private String postContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToMany
     @JoinTable(
             name = "post_tags",
-            joinColumns = @JoinColumn(name = "postId"),
-            inverseJoinColumns = @JoinColumn(name = "tagId"))
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     private Instant createdAt;

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -15,14 +16,13 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
+    @NotBlank(message = "Category name is required")
     private String categoryName;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "category")
     private List<Post> posts;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private User user;
 }

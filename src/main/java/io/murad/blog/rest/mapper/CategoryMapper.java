@@ -10,15 +10,15 @@ import org.mapstruct.Mappings;
 public interface CategoryMapper {
 
     @Mappings({
-            @Mapping(target = "id", source = "category.categoryId"),
+            @Mapping(target = "id", source = "category.id"),
             @Mapping(target = "name", source = "category.categoryName")
     })
     public CategoryDto mapCategoryToDto(Category category);
 
-    @Mappings({
-            @Mapping(target = "categoryId", source = "categoryDto.id"),
-            @Mapping(target = "categoryName", source = "categoryDto.name"),
-            @Mapping(target = "posts", ignore = true)
-    })
+//    @Mappings({
+//            @Mapping(target = "categoryId", source = "categoryDto.id"),
+//            @Mapping(target = "categoryName", source = "categoryDto.name"),
+//            @Mapping(target = "posts", ignore = true)
+//    })
     public Category mapDtoToCategory(CategoryDto categoryDto);
 }

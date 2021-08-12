@@ -1,6 +1,7 @@
 package io.murad.blog.rest.mapper;
 
 import io.murad.blog.rest.dto.PostRequest;
+import io.murad.blog.rest.dto.PostResponse;
 import io.murad.blog.rest.model.Category;
 import io.murad.blog.rest.model.Post;
 import io.murad.blog.rest.model.Tag;
@@ -24,4 +25,9 @@ public interface PostMapper {
     })
     public Post mapToPost(PostRequest postRequest, Category category, User user);
 
+    @Mapping(target = "id",source = "post.postId")
+    @Mapping(target = "title",source = "post.postTitle")
+    @Mapping(target = "content", source = "post.postContent")
+    @Mapping(target = "categoryName", source = "post.category")
+    public PostResponse mapToPostDto(Post post);
 }

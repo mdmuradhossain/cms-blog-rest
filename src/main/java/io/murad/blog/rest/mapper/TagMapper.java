@@ -10,13 +10,13 @@ import org.mapstruct.Mappings;
 public interface TagMapper {
 
     @Mappings({
-            @Mapping(target = "id",source = "tag.tagId"),
+            @Mapping(target = "id",source = "tag.id"),
             @Mapping(target = "name",source = "tag.tagName")
     })
     TagDto mapToTagDto(Tag tag);
 
     @Mappings({
-            @Mapping(target = "tagId", source = "tagDto.id"),
+            @Mapping(target = "id", source = "tagDto.id"),
             @Mapping(target = "tagName", source = "tagDto.name"),
             @Mapping(target = "posts", ignore = true)
     })

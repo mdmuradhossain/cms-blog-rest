@@ -23,7 +23,7 @@ public class TagService {
     public void saveTag(TagDto tagDto) {
         Tag saveTag = tagRepository.save(tagMapper.mapToTag(tagDto));
         log.info(saveTag.getTagName());
-        saveTag.setTagId(tagDto.getId());
+        saveTag.setId(tagDto.getId());
     }
 
     public List<TagDto> getAllTags() {

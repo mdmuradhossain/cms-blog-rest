@@ -15,8 +15,8 @@ import java.util.List;
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tagId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String tagName;
 
