@@ -9,16 +9,16 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-    @Mappings({
-            @Mapping(target = "id", source = "category.id"),
-            @Mapping(target = "name", source = "category.categoryName")
-    })
+//    @Mappings({
+//            @Mapping(target = "id", source = "category.id"),
+//            @Mapping(target = "name", source = "category.categoryName")
+//    })
     public CategoryDto mapCategoryToDto(Category category);
 
-//    @Mappings({
-//            @Mapping(target = "categoryId", source = "categoryDto.id"),
-//            @Mapping(target = "categoryName", source = "categoryDto.name"),
-//            @Mapping(target = "posts", ignore = true)
-//    })
+    @Mappings({
+            @Mapping(target = "id", source = "categoryDto.id"),
+            @Mapping(target = "categoryName", source = "categoryDto.name"),
+            @Mapping(target = "posts", ignore = true)
+    })
     public Category mapDtoToCategory(CategoryDto categoryDto);
 }

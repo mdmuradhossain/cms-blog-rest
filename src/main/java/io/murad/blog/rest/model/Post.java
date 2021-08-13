@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "posts")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post implements Serializable {
@@ -33,7 +32,7 @@ public class Post implements Serializable {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),

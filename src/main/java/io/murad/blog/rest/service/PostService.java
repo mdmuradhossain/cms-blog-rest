@@ -3,6 +3,7 @@ package io.murad.blog.rest.service;
 import io.murad.blog.rest.dto.PostRequest;
 import io.murad.blog.rest.dto.PostResponse;
 import io.murad.blog.rest.exception.CategoryNotFoundException;
+import io.murad.blog.rest.exception.PostNotFoundException;
 import io.murad.blog.rest.mapper.PostMapper;
 import io.murad.blog.rest.model.Category;
 import io.murad.blog.rest.model.Post;
@@ -13,6 +14,7 @@ import io.murad.blog.rest.repository.PostRepository;
 import io.murad.blog.rest.repository.TagRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class PostService {
 
     private final CategoryRepository categoryRepository;
@@ -29,17 +32,26 @@ public class PostService {
     private final PostMapper postMapper;
 
     public void savePost(PostRequest postRequest) {
-        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(()-> new CategoryNotFoundException("Category Not Found "+postRequest.getCategoryName()));
+        Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("Category Not Found " + postRequest.getCategoryName()));
         User currentUser = authService.getCurrentUser();
+
+//        Tag tag = new Tag();
+//        Post post = new Post();
+//        if (tag.getTagName().equals(tagRepository.findByTagName(postRequest.getTagNames()))){
+//
+//        }
+//        post.setTags(postRequest.getTagNames());
         postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
     }
 
-    public List<PostResponse> getAllPosts(){
+    public List<PostResponse> getAllPosts() {
         return postRepository.findAll()
                 .stream()
-                .map((post)-> postMapper.mapToPostDto(post)).collect(Collectors.toList());
+                .map((post) -> postMapper.mapToPostDto(post)).collect(Collectors.toList());
     }
-    public PostResponse getPost(Long id){
-        Post post = postRepository.findById(id).orElseThrow(()->new PostNotFoundException("Post not found "+id.toString()));
+
+    public PostResponse getPost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found " + id.toString()));
+        return postMapper.mapToPostDto(post);
     }
 }

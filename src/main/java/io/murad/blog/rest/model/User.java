@@ -10,7 +10,6 @@ import java.time.Instant;
 
 @Data
 @Entity
-@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

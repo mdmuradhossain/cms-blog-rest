@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tags")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
@@ -22,4 +21,5 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags")
     private List<Post> posts;
+
 }

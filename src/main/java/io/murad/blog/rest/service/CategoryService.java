@@ -22,12 +22,12 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Transactional(readOnly = true)
-    public void saveCategory(CategoryDto categoryDto) {
+    @Transactional
+    public CategoryDto saveCategory(CategoryDto categoryDto) {
         Category saveCategory = categoryRepository.save(categoryMapper.mapDtoToCategory(categoryDto));
         log.info("Category Saved..." + saveCategory.getCategoryName());
-//        categoryDto.setId(saveCategory.getId());
-        saveCategory.setId(categoryDto.getId());
+        categoryDto.setId(saveCategory.getId());
+        return categoryDto;
     }
 
     public List<CategoryDto> getAllCategories() {

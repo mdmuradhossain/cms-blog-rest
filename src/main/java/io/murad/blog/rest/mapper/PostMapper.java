@@ -18,9 +18,10 @@ public interface PostMapper {
 
     @Mappings({
             @Mapping(target = "category", source = "category"),
-//            @Mapping(target = "tags", source = "tags"),
+            @Mapping(target = "tags", source = "postRequest.tagNames"),
             @Mapping(target = "user", source = "user"),
             @Mapping(target = "createdAt", expression = "java(java.time.Instant.now())"),
+            @Mapping(target = "postTitle",source = "postRequest.title"),
             @Mapping(target = "postContent", source = "postRequest.content")
     })
     public Post mapToPost(PostRequest postRequest, Category category, User user);
@@ -28,6 +29,6 @@ public interface PostMapper {
     @Mapping(target = "id",source = "post.postId")
     @Mapping(target = "title",source = "post.postTitle")
     @Mapping(target = "content", source = "post.postContent")
-    @Mapping(target = "categoryName", source = "post.category")
+    @Mapping(target = "categoryName", source = "category.categoryName")
     public PostResponse mapToPostDto(Post post);
 }
