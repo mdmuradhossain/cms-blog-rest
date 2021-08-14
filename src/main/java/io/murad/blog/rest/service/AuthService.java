@@ -35,6 +35,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
