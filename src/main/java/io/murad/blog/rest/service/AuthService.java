@@ -83,7 +83,7 @@ public class AuthService {
         String token = jwtAuthenticationProvider.generateToken(authenticate);
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
-                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(Instant.now().plusMillis(jwtAuthenticationProvider.getJwtExpirationInMillis()))
                 .username(authenticationRequest.getUsername())
                 .build();
