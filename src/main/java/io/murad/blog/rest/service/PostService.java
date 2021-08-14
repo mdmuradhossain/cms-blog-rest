@@ -34,13 +34,6 @@ public class PostService {
     public void savePost(PostRequest postRequest) {
         Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("Category Not Found " + postRequest.getCategoryName()));
         User currentUser = authService.getCurrentUser();
-
-//        Tag tag = new Tag();
-//        Post post = new Post();
-//        if (tag.getTagName().equals(tagRepository.findByTagName(postRequest.getTagNames()))){
-//
-//        }
-//        post.setTags(postRequest.getTagNames());
         postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
     }
 
@@ -53,5 +46,9 @@ public class PostService {
     public PostResponse getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found " + id.toString()));
         return postMapper.mapToPostDto(post);
+    }
+
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
     }
 }

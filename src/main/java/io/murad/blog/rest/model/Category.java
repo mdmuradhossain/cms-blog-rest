@@ -1,5 +1,6 @@
 package io.murad.blog.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -14,7 +17,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Category implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +30,7 @@ public class Category {
     private String categoryName;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "category")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Post> posts;
 
 }

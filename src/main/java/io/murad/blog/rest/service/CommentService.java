@@ -26,8 +26,8 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final MailContentBuilder mailContentBuilder;
 
-    public void saveComment(CommentDto commentDto) {
-        Post post = postRepository.findById(commentDto.getPostId()).orElseThrow(() -> new PostNotFoundException((commentDto.getPostId().toString()));
+    public Comment saveComment(CommentDto commentDto) {
+        Post post = postRepository.findById(commentDto.getPostId()).orElseThrow(() -> new PostNotFoundException((commentDto.getPostId().toString())));
         User user = authService.getCurrentUser();
         Comment comment = commentMapper.mapToComment(commentDto, post, user);
         commentRepository.save(comment);
@@ -35,6 +35,7 @@ public class CommentService {
         //Send message for comment
         String message = mailContentBuilder.build(post.getUser().getUserName() + " posted a comment on your post." + POST_URL);
         sendCommentNotification(message, post.getUser());
+        return comment;
     }
 
     private void sendCommentNotification(String message, User user) {

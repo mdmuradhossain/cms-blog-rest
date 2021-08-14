@@ -30,13 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService)
-//                .passwordEncoder(passwordEncoder());
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -44,12 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-
-    }
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder.userDetailsService(userDetailsService)
+//                .passwordEncoder(passwordEncoder());
+//
+//    }
 
     @Bean
     public UserDetailsService userDetailsService() {

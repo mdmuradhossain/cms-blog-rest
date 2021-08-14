@@ -6,13 +6,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
