@@ -1,14 +1,14 @@
 package io.murad.blog.rest.controller;
 
 import io.murad.blog.rest.dto.PostRequest;
+import io.murad.blog.rest.dto.PostResponse;
 import io.murad.blog.rest.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -21,5 +21,21 @@ public class PostController {
     public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
         postService.savePost(postRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> getPosts() {
+        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
+        return new ResponseEntity<>(postService.getPost(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return new ResponseEntity<>(HttpStatus.GONE);
     }
 }
