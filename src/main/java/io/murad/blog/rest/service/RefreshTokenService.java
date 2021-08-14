@@ -22,7 +22,7 @@ public class RefreshTokenService {
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setCreatedDate(Instant.now());
 
-        refreshTokenRepository.save(refreshToken);
+      return refreshTokenRepository.save(refreshToken);
     }
 
     public void validateRefreshToken(String token) {

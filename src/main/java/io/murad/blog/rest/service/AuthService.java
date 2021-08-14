@@ -2,6 +2,7 @@ package io.murad.blog.rest.service;
 
 import io.murad.blog.rest.dto.AuthenticationRequest;
 import io.murad.blog.rest.dto.AuthenticationResponse;
+import io.murad.blog.rest.dto.RefreshTokenRequest;
 import io.murad.blog.rest.dto.RegisterRequest;
 import io.murad.blog.rest.exception.BlogRestException;
 import io.murad.blog.rest.model.NotificationEmail;
@@ -11,6 +12,7 @@ import io.murad.blog.rest.repository.UserRepository;
 import io.murad.blog.rest.repository.VerificationTokenRepository;
 import io.murad.blog.rest.security.JwtAuthenticationProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -95,5 +100,21 @@ public class AuthService {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByUserName(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found " + principal.getUsername()));
+    }
+
+    public boolean isLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtAuthenticationProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtAuthenticationProvider.getJwtExpirationInMillis()))
+                .username(refreshTokenRequest.getUsername())
+                .build();
     }
 }
