@@ -66,13 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//        authenticationManagerBuilder.userDetailsService(userDetailsService)
-//                .passwordEncoder(passwordEncoder());
-//
-//    }
-
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
