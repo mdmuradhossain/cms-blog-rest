@@ -29,7 +29,7 @@ public class TagService {
     public List<TagDto> getAllTags() {
         return tagRepository.findAll()
                 .stream()
-                .map((tag) -> tagMapper.mapToTagDto(tag)).collect(Collectors.toList());
+                .map(tagMapper::mapToTagDto).collect(Collectors.toList());
     }
 
     public TagDto getTag(Long id) {

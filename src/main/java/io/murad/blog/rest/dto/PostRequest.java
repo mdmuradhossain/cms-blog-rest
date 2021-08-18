@@ -15,5 +15,6 @@ public class PostRequest {
     private String categoryName;
     private String title;
     private String content;
-    private List<Tag> tagNames;
+    private List<String> tagNames;
+//    private List<TagDto> tagNames;
 }
