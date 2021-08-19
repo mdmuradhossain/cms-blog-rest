@@ -12,6 +12,7 @@ import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.repository.CategoryRepository;
 import io.murad.blog.rest.repository.PostRepository;
 import io.murad.blog.rest.repository.TagRepository;
+import io.murad.blog.rest.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class PostService {
 
+    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final PostRepository postRepository;
@@ -40,12 +42,18 @@ public class PostService {
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll()
                 .stream()
-                .map((post) -> postMapper.mapToPostDto(post)).collect(Collectors.toList());
+                .map(postMapper::mapToPostDto).collect(Collectors.toList());
     }
 
     public PostResponse getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found " + id.toString()));
         return postMapper.mapToPostDto(post);
+    }
+
+    public List<PostResponse> getAllPostsByUsername(String userName) {
+        return postRepository.findAllByUser(userRepository.findByUserName(userName))
+                .stream()
+                .map(postMapper::mapToPostDto).collect(Collectors.toList());
     }
 
     public void deletePost(Long id) {
