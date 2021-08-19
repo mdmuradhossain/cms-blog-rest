@@ -14,6 +14,7 @@ import io.murad.blog.rest.repository.PostRepository;
 import io.murad.blog.rest.repository.TagRepository;
 import io.murad.blog.rest.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +52,8 @@ public class PostService {
     }
 
     public List<PostResponse> getAllPostsByUsername(String userName) {
-        return postRepository.findAllByUser(userRepository.findByUserName(userName))
+        // User user = userRepository.findByUserName(userName);
+        return postRepository.findAllByUser(userRepository.findByUserName(userName).orElseThrow(() -> new UsernameNotFoundException(userName)))
                 .stream()
                 .map(postMapper::mapToPostDto).collect(Collectors.toList());
     }
