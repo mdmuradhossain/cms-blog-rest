@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/posts")
@@ -31,6 +32,11 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
         return new ResponseEntity<>(postService.getPost(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/by-user/{userName}")
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable("userName") String userName) {
+        return new ResponseEntity<>(postService.getAllPostsByUsername(userName), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
