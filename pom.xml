@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cms-blog-rest</name>
 	<description>CMS Blog Rest API</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>15</java.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
