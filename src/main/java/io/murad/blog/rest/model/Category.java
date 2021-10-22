@@ -1,6 +1,7 @@
 package io.murad.blog.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Category implements Serializable {
     @NotBlank(message = "Category name is required")
     private String categoryName;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "category")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Post> posts;
