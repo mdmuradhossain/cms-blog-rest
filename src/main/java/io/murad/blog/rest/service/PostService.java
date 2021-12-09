@@ -7,7 +7,6 @@ import io.murad.blog.rest.exception.PostNotFoundException;
 import io.murad.blog.rest.mapper.PostMapper;
 import io.murad.blog.rest.model.Category;
 import io.murad.blog.rest.model.Post;
-import io.murad.blog.rest.model.Tag;
 import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.repository.CategoryRepository;
 import io.murad.blog.rest.repository.PostRepository;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +32,10 @@ public class PostService {
     private final AuthService authService;
     private final PostMapper postMapper;
 
-    public void savePost(PostRequest postRequest) {
+    public Post savePost(PostRequest postRequest) {
         Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("Category Not Found " + postRequest.getCategoryName()));
         User currentUser = authService.getCurrentUser();
-        postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
+        return postRepository.save(postMapper.mapToPost(postRequest, category, currentUser));
     }
 
     public List<PostResponse> getAllPosts() {

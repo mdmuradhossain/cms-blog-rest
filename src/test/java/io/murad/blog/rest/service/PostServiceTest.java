@@ -1,6 +1,8 @@
 package io.murad.blog.rest.service;
 
+import io.murad.blog.rest.dto.PostRequest;
 import io.murad.blog.rest.dto.PostResponse;
+import io.murad.blog.rest.model.Category;
 import io.murad.blog.rest.model.Post;
 import io.murad.blog.rest.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,5 +37,16 @@ class PostServiceTest {
         Long postId = 1L;
         PostResponse foundPost = postService.getPost(postId);
         assertEquals(postId, foundPost.getId());
+    }
+
+    @Test
+    public void shouldSavePostToDB(){
+        PostRequest post = PostRequest.builder()
+                .categoryName("Java")
+                .title("Java Programming Language")
+                .content("Java is a high level programming language.")
+                .build();
+        Post savedPost = postService.savePost(post);
+        assertEquals(post,savedPost);
     }
 }
