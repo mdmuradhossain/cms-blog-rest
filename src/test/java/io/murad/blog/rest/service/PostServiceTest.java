@@ -4,6 +4,7 @@ import io.murad.blog.rest.dto.PostRequest;
 import io.murad.blog.rest.dto.PostResponse;
 import io.murad.blog.rest.model.Category;
 import io.murad.blog.rest.model.Post;
+import io.murad.blog.rest.model.User;
 import io.murad.blog.rest.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,15 +21,23 @@ class PostServiceTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private AuthService authService;
     @MockBean
     private PostRepository postRepository;
 
     @BeforeEach
     void setUp() {
+        User user = authService.getCurrentUser();
         Post post = Post.builder()
                 .postId(1L)
+                .postTitle("Java Programming Language")
+                .postContent("Java is a high level programming language.")
+                .user(user)
                 .build();
         Mockito.when(postRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(post));
+        assert post != null;
+        Mockito.when(postRepository.save(post)).thenReturn(post);
 
     }
 
